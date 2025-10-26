@@ -1,0 +1,12 @@
+# https://developers.home-assistant.io/docs/add-ons/repository#repository-configuration
+name: WhatsApp Multi-Account
+url: 'https://github.com/autohhacs/whatsapp-ha-addon'
+maintainer: autohhacs
+
+# For local installation:
+# 1. Copy this entire folder to your Home Assistant config/addons directory
+# 2. In Home Assistant, go to Settings -> Add-ons -> Add-on Store
+# 3. Click the three dots menu in the top right
+# 4. Select "Repositories"
+# 5. Add: http://homeassistant.local:8123/local/addons
+# Or simply access from the Local Add-ons section
