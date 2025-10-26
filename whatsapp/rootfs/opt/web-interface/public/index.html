@@ -50,6 +50,54 @@
         </div>
     </div>
 
+    <!-- Status Modal -->
+    <div id="status-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeStatusModal()">&times;</span>
+            <h2>Post WhatsApp Status</h2>
+            <p class="modal-subtitle">Post a status update for <strong id="status-instance-name"></strong></p>
+            <input type="hidden" id="status-instance-id">
+            <div class="form-group">
+                <label for="status-text">Status Text:</label>
+                <textarea id="status-text" rows="4" placeholder="Enter your status message..."></textarea>
+            </div>
+            <div class="modal-footer form-actions">
+                <button class="btn btn-secondary" onclick="closeStatusModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="postStatus()">Post Status</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Media Modal -->
+    <div id="media-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeMediaModal()">&times;</span>
+            <h2>Send Media as File</h2>
+            <p class="modal-subtitle">Send image/video as a file for <strong id="media-instance-name"></strong></p>
+            <input type="hidden" id="media-instance-id">
+            <div class="form-group">
+                <label for="media-phone">Phone Number:</label>
+                <input type="text" id="media-phone" placeholder="e.g., 1234567890@c.us or 1234567890">
+            </div>
+            <div class="form-group">
+                <label for="media-url">Media URL:</label>
+                <input type="text" id="media-url" placeholder="https://example.com/image.jpg">
+            </div>
+            <div class="form-group">
+                <label for="media-filename">Filename (optional):</label>
+                <input type="text" id="media-filename" placeholder="e.g., photo.jpg or video.mp4">
+            </div>
+            <div class="form-group">
+                <label for="media-caption">Caption (optional):</label>
+                <textarea id="media-caption" rows="3" placeholder="Enter a caption..."></textarea>
+            </div>
+            <div class="modal-footer form-actions">
+                <button class="btn btn-secondary" onclick="closeMediaModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="sendMedia()">Send Media</button>
+            </div>
+        </div>
+    </div>
+
     <script src="app.js"></script>
 </body>
 </html>
