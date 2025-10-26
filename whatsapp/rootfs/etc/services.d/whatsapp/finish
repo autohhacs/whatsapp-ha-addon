@@ -1,0 +1,22 @@
+#!/usr/bin/with-contenv bashio
+# ==============================================================================
+# Cleanup when service stops
+# ==============================================================================
+
+bashio::log.info "Stopping WhatsApp instances..."
+
+# Stop all instance processes
+if [ -d "/data/whatsapp" ]; then
+    for pidfile in /data/whatsapp/*/pid; do
+        if [ -f "$pidfile" ]; then
+            PID=$(cat "$pidfile")
+            if kill -0 "$PID" 2>/dev/null; then
+                bashio::log.info "Stopping process $PID"
+                kill "$PID"
+            fi
+            rm -f "$pidfile"
+        fi
+    done
+fi
+
+bashio::log.info "All WhatsApp instances stopped"
