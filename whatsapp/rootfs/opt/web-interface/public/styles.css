@@ -355,6 +355,53 @@ h1 {
     font-size: 14px;
 }
 
+/* Form Styles */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.modal-footer.form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    background: transparent;
+    padding: 0;
+    margin-top: 24px;
+}
+
+.modal-footer.form-actions .btn {
+    flex: none;
+    min-width: 100px;
+}
+
 @media (max-width: 768px) {
     .container {
         padding: 12px;
