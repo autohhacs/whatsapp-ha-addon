@@ -88,6 +88,18 @@ function createInstanceCard(instance) {
                     Show QR Code
                 </button>
             ` : `
+                <button class="btn btn-primary" onclick="showStatusModal('${instance.id}', '${escapeHtml(instance.name)}')">
+                    <svg viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8C14.21,8 16,9.79 16,12C16,14.21 14.21,16 12,16C9.79,16 8,14.21 8,12C8,9.79 9.79,8 12,8Z" />
+                    </svg>
+                    Post Status
+                </button>
+                <button class="btn btn-primary" onclick="showMediaModal('${instance.id}', '${escapeHtml(instance.name)}')">
+                    <svg viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M9,10V15L15,12.5M17,7H7A2,2 0 0,0 5,9V15A2,2 0 0,0 7,17H17A2,2 0 0,0 19,15V9A2,2 0 0,0 17,7Z" />
+                    </svg>
+                    Send Media
+                </button>
                 <button class="btn btn-secondary" onclick="restartInstance('${instance.id}')">
                     <svg viewBox="0 0 24 24">
                         <path fill="currentColor" d="M12,4C14.1,4 16.1,4.8 17.6,6.3C20.7,9.4 20.7,14.5 17.6,17.6C15.8,19.5 13.3,20.2 10.9,19.9L11.4,17.9C13.1,18.1 14.9,17.5 16.2,16.2C18.5,13.9 18.5,10.1 16.2,7.7C15.1,6.6 13.5,6 12,6V10.6L7,5.6L12,0.6V4M6.3,17.6C3.7,15 3.3,11 5.1,7.9L6.6,9.4C5.5,11.6 5.9,14.4 7.8,16.2C8.3,16.7 8.9,17.1 9.6,17.4L9,19.4C8,19 7.1,18.4 6.3,17.6Z" />
@@ -193,10 +205,132 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
+// Show Status Modal
+function showStatusModal(instanceId, instanceName) {
+    const modal = document.getElementById('status-modal');
+    document.getElementById('status-instance-name').textContent = instanceName;
+    document.getElementById('status-instance-id').value = instanceId;
+    document.getElementById('status-text').value = '';
+    modal.classList.add('show');
+}
+
+function closeStatusModal() {
+    const modal = document.getElementById('status-modal');
+    modal.classList.remove('show');
+}
+
+async function postStatus() {
+    const instanceId = document.getElementById('status-instance-id').value;
+    const statusText = document.getElementById('status-text').value;
+    const statusBtn = document.querySelector('#status-modal .btn-primary');
+
+    if (!statusText.trim()) {
+        alert('Please enter status text');
+        return;
+    }
+
+    statusBtn.disabled = true;
+    statusBtn.textContent = 'Posting...';
+
+    try {
+        const response = await fetch(`/api/instance/${instanceId}/status`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: statusText })
+        });
+        const data = await response.json();
+
+        if (data.success || response.ok) {
+            alert('Status posted successfully!');
+            closeStatusModal();
+        } else {
+            alert(`Failed to post status: ${data.error || 'Unknown error'}`);
+        }
+    } catch (error) {
+        alert(`Failed to post status: ${error.message}`);
+    } finally {
+        statusBtn.disabled = false;
+        statusBtn.textContent = 'Post Status';
+    }
+}
+
+// Show Media Modal
+function showMediaModal(instanceId, instanceName) {
+    const modal = document.getElementById('media-modal');
+    document.getElementById('media-instance-name').textContent = instanceName;
+    document.getElementById('media-instance-id').value = instanceId;
+    document.getElementById('media-phone').value = '';
+    document.getElementById('media-url').value = '';
+    document.getElementById('media-caption').value = '';
+    document.getElementById('media-filename').value = '';
+    modal.classList.add('show');
+}
+
+function closeMediaModal() {
+    const modal = document.getElementById('media-modal');
+    modal.classList.remove('show');
+}
+
+async function sendMedia() {
+    const instanceId = document.getElementById('media-instance-id').value;
+    const phoneNumber = document.getElementById('media-phone').value;
+    const mediaUrl = document.getElementById('media-url').value;
+    const caption = document.getElementById('media-caption').value;
+    const filename = document.getElementById('media-filename').value;
+    const mediaBtn = document.querySelector('#media-modal .btn-primary');
+
+    if (!phoneNumber.trim()) {
+        alert('Please enter a phone number');
+        return;
+    }
+
+    if (!mediaUrl.trim()) {
+        alert('Please enter a media URL');
+        return;
+    }
+
+    mediaBtn.disabled = true;
+    mediaBtn.textContent = 'Sending...';
+
+    try {
+        const response = await fetch(`/api/instance/${instanceId}/send-media`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                phone: phoneNumber,
+                mediaUrl: mediaUrl,
+                caption: caption,
+                filename: filename || undefined,
+                sendAsDocument: true
+            })
+        });
+        const data = await response.json();
+
+        if (data.success || response.ok) {
+            alert('Media sent successfully!');
+            closeMediaModal();
+        } else {
+            alert(`Failed to send media: ${data.error || 'Unknown error'}`);
+        }
+    } catch (error) {
+        alert(`Failed to send media: ${error.message}`);
+    } finally {
+        mediaBtn.disabled = false;
+        mediaBtn.textContent = 'Send Media';
+    }
+}
+
 // Close modal when clicking outside
 window.onclick = function(event) {
-    const modal = document.getElementById('qr-modal');
-    if (event.target === modal) {
+    const qrModal = document.getElementById('qr-modal');
+    const statusModal = document.getElementById('status-modal');
+    const mediaModal = document.getElementById('media-modal');
+
+    if (event.target === qrModal) {
         closeQRModal();
+    } else if (event.target === statusModal) {
+        closeStatusModal();
+    } else if (event.target === mediaModal) {
+        closeMediaModal();
     }
 }
