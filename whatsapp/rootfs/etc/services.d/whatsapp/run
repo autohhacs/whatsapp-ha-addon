@@ -60,10 +60,12 @@ start_instance() {
     fi
 }
 
-# Start each configured instance
+# Start each configured instance (up to 5)
 start_instance 1
 start_instance 2
 start_instance 3
+start_instance 4
+start_instance 5
 
 bashio::log.info "All enabled WhatsApp instances started successfully!"
 bashio::log.info "Access the web interface at: http://homeassistant.local:${WEB_PORT}"
