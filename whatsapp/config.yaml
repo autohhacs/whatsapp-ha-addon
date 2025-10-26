@@ -17,11 +17,15 @@ ports:
   3000/tcp: 3000
   3001/tcp: 3001
   3002/tcp: 3002
+  3003/tcp: 3003
+  3004/tcp: 3004
   8099/tcp: 8099
 ports_description:
   3000/tcp: "WhatsApp Instance 1 API"
   3001/tcp: "WhatsApp Instance 2 API"
   3002/tcp: "WhatsApp Instance 3 API"
+  3003/tcp: "WhatsApp Instance 4 API"
+  3004/tcp: "WhatsApp Instance 5 API"
   8099/tcp: "Web Interface"
 ingress: true
 ingress_port: 8099
@@ -42,6 +46,14 @@ options:
   instance_3_id: "business"
   instance_3_port: 3002
   instance_3_name: "Business WhatsApp"
+  instance_4_enabled: false
+  instance_4_id: "family"
+  instance_4_port: 3003
+  instance_4_name: "Family WhatsApp"
+  instance_5_enabled: false
+  instance_5_id: "extra"
+  instance_5_port: 3004
+  instance_5_name: "Extra WhatsApp"
 schema:
   web_port: port
   instance_1_enabled: bool
@@ -56,3 +68,11 @@ schema:
   instance_3_id: str
   instance_3_port: port
   instance_3_name: str
+  instance_4_enabled: bool
+  instance_4_id: str
+  instance_4_port: port
+  instance_4_name: str
+  instance_5_enabled: bool
+  instance_5_id: str
+  instance_5_port: port
+  instance_5_name: str
