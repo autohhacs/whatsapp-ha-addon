@@ -1,0 +1,72 @@
+#!/usr/bin/with-contenv bashio
+# ==============================================================================
+# Start WhatsApp Multi-Instance Service
+# ==============================================================================
+
+bashio::log.info "Starting WhatsApp Multi-Account Add-on..."
+
+# Create necessary directories
+mkdir -p /data/whatsapp
+mkdir -p /share/whatsapp
+
+# Get web port from config
+WEB_PORT=$(bashio::config 'web_port')
+
+# Start web interface
+bashio::log.info "Starting Web Interface on port ${WEB_PORT}..."
+cd /opt/web-interface || exit 1
+PORT=${WEB_PORT} node server.js &
+WEB_PID=$!
+bashio::log.info "Web interface started with PID ${WEB_PID}"
+
+# Wait for web interface to start
+sleep 2
+
+# Function to start an instance
+start_instance() {
+    local num=$1
+    local enabled=$(bashio::config "instance_${num}_enabled")
+
+    if [ "$enabled" = "true" ]; then
+        local instance_id=$(bashio::config "instance_${num}_id")
+        local instance_port=$(bashio::config "instance_${num}_port")
+        local instance_name=$(bashio::config "instance_${num}_name")
+
+        bashio::log.info "Starting instance ${num}: ${instance_name} (ID: ${instance_id}) on port ${instance_port}"
+
+        # Create instance-specific directory
+        mkdir -p /data/whatsapp/${instance_id}
+
+        # Start WhatsApp REST API instance
+        if [ -d "/app" ] && [ -f "/app/dist/src/index.js" ]; then
+            cd /app || exit 1
+            PORT=${instance_port} \
+            INSTANCE_ID=${instance_id} \
+            SESSION_PATH=/data/whatsapp/${instance_id} \
+            node dist/src/index.js &
+        else
+            bashio::log.warning "WhatsApp REST API not found at /app - instance ${instance_id} will not start"
+            bashio::log.warning "Please install whatsapp-web.js or compatible REST API to /app"
+            continue
+        fi
+
+        # Store PID for this instance
+        echo $! > /data/whatsapp/${instance_id}/pid
+
+        bashio::log.info "Instance ${instance_id} started with PID $(cat /data/whatsapp/${instance_id}/pid)"
+
+        # Small delay between starts
+        sleep 2
+    fi
+}
+
+# Start each configured instance
+start_instance 1
+start_instance 2
+start_instance 3
+
+bashio::log.info "All enabled WhatsApp instances started successfully!"
+bashio::log.info "Access the web interface at: http://homeassistant.local:${WEB_PORT}"
+
+# Keep the script running
+wait
