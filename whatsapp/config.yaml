@@ -1,0 +1,58 @@
+name: WhatsApp Multi-Account
+version: 1.0.0
+slug: whatsapp-multi
+description: Connect multiple WhatsApp accounts to Home Assistant with QR code authentication
+url: https://github.com/autohhacs/whatsapp-ha-addon
+arch:
+  - amd64
+  - aarch64
+  - armv7
+  - armhf
+startup: application
+boot: auto
+init: false
+hassio_api: true
+hassio_role: default
+ports:
+  3000/tcp: 3000
+  3001/tcp: 3001
+  3002/tcp: 3002
+  8099/tcp: 8099
+ports_description:
+  3000/tcp: "WhatsApp Instance 1 API"
+  3001/tcp: "WhatsApp Instance 2 API"
+  3002/tcp: "WhatsApp Instance 3 API"
+  8099/tcp: "Web Interface"
+ingress: true
+ingress_port: 8099
+panel_icon: mdi:whatsapp
+panel_title: WhatsApp
+webui: "http://[HOST]:[PORT:8099]"
+options:
+  web_port: 8099
+  instance_1_enabled: true
+  instance_1_id: "personal"
+  instance_1_port: 3000
+  instance_1_name: "Personal WhatsApp"
+  instance_2_enabled: false
+  instance_2_id: "work"
+  instance_2_port: 3001
+  instance_2_name: "Work WhatsApp"
+  instance_3_enabled: false
+  instance_3_id: "business"
+  instance_3_port: 3002
+  instance_3_name: "Business WhatsApp"
+schema:
+  web_port: port
+  instance_1_enabled: bool
+  instance_1_id: str
+  instance_1_port: port
+  instance_1_name: str
+  instance_2_enabled: bool
+  instance_2_id: str
+  instance_2_port: port
+  instance_2_name: str
+  instance_3_enabled: bool
+  instance_3_id: str
+  instance_3_port: port
+  instance_3_name: str
