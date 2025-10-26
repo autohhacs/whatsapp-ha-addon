@@ -1,0 +1,46 @@
+configuration:
+  instance_1_enabled:
+    name: Enable Instance 1
+    description: Enable or disable the first WhatsApp instance
+  instance_1_id:
+    name: Instance 1 ID
+    description: Unique identifier (e.g., "personal"). Use lowercase, no spaces.
+  instance_1_port:
+    name: Instance 1 Port
+    description: API port for instance 1 (default 3000)
+  instance_1_name:
+    name: Instance 1 Name
+    description: Friendly display name (e.g., "Personal WhatsApp")
+  instance_2_enabled:
+    name: Enable Instance 2
+    description: Enable or disable the second WhatsApp instance
+  instance_2_id:
+    name: Instance 2 ID
+    description: Unique identifier (e.g., "work"). Use lowercase, no spaces.
+  instance_2_port:
+    name: Instance 2 Port
+    description: API port for instance 2 (default 3001)
+  instance_2_name:
+    name: Instance 2 Name
+    description: Friendly display name (e.g., "Work WhatsApp")
+  instance_3_enabled:
+    name: Enable Instance 3
+    description: Enable or disable the third WhatsApp instance
+  instance_3_id:
+    name: Instance 3 ID
+    description: Unique identifier (e.g., "business"). Use lowercase, no spaces.
+  instance_3_port:
+    name: Instance 3 Port
+    description: API port for instance 3 (default 3002)
+  instance_3_name:
+    name: Instance 3 Name
+    description: Friendly display name (e.g., "Business WhatsApp")
+  web_port:
+    name: Web Interface Port
+    description: Port for the web management interface (default 8099)
+
+network:
+  3000/tcp: WhatsApp Instance 1 API
+  3001/tcp: WhatsApp Instance 2 API
+  3002/tcp: WhatsApp Instance 3 API
+  8099/tcp: Web Management Interface
